@@ -1,3 +1,4 @@
+const Employee = require("./lib/Employee")
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
@@ -9,27 +10,161 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const allEmployees = []
+
+//Initial questions for fist team member (Manager)
+inquirer
+    .prompt([
+        {
+            type: "input",
+            message: "What is your manager's name?",
+            name: "name",
+        },
+        {
+            type: "input",
+            message: "What is your manager's id?",
+            name: "id",
+        },
+        {
+            type: "input",
+            message: "What is your manager's email?",
+            name: "email",
+        },
+        {
+            type: "input",
+            message: "What is your manager's office number?",
+            name: "officeNumber",
+        }
+    ]
+    )
+    .then(function(response) {
+        const newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
+        allEmployees.push(newManager);
+        nextMember();
+    })
+
+// Function to ask Engineer questions
+function engineerQuestions() {
+    inquirer
+        .prompt(
+          [
+            {
+                type: "input",
+                message: "What is your engineer's name?",
+                name: "name",
+            },
+            {
+                type: "input",
+                message: "What is your engineer's id?",
+                name: "id",
+            },
+            {
+                type: "input",
+                message: "What is your engineer's email?",
+                name: "email",
+            },
+            {
+                type: "input",
+                message: "What is your engineer's GitHub username?",
+                name: "github",
+            }
+        ]
+        )
+        .then(function(response) {
+            const newEngineer = new Engineer(response.name, response.id, response.email, response.github);
+            allEmployees.push(newEngineer);
+            nextMember();
+    })
+}
+
+// Function to ask Intern questions
+function internQuestions() {
+    inquirer
+        .prompt(
+          [
+            {
+                type: "input",
+                message: "What is your intern's name?",
+                name: "name",
+            },
+            {
+                type: "input",
+                message: "What is your intern's id?",
+                name: "id",
+            },
+            {
+                type: "input",
+                message: "What is your intern's email?",
+                name: "email",
+            },
+            {
+                type: "input",
+                message: "What is your intern's school?",
+                name: "school",
+            }
+        ]
+        )
+        .then(function(response) {
+            const newIntern = new Intern(response.name, response.id, response.email, response.school);
+            allEmployees.push(newIntern);
+            nextMember();
+    })
+}
+
+// Function to prompt multiple choice question about which employee to add next or to finish list
+function nextMember() {
+    inquirer
+        .prompt(
+          [
+            {
+                type: "list",
+                message: "Which type of team member would you like to add next?",
+                name: "role",
+                choices: [
+                    "Engineer",
+                    "Intern",
+                    "I am done adding team members."
+                ],
+            }
+        ]
+        )
+        .then(function(response) {
+            if (response.role === "Engineer") {
+              engineerQuestions();
+            }
+            else if (response.role === "Intern") {
+                internQuestions();
+            }
+            else {
+                console.log("Your team is done check Ouput folder for HTML file");
+                createHTMLFile(allEmployees);
+            }
+    })
+}
+
+// Function to create the user's generated folder and files
+function createUserFile(data) {
+    fs.writeFile(outputPath, render(data), function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("Success!");
+    })
+}
+
+// Function to generate the HTML file from the templates
+function createHTMLFile(data) {
+    if (fs.existsSync(OUTPUT_DIR)) {
+        createUserFile(data);
+    } else {
+        fs.mkdir(OUTPUT_DIR, function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
+    
+        createUserFile(data);
+    }
+}
 
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
