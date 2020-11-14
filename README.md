@@ -35,7 +35,7 @@ After the tests have passed you should see the following results:
 
 ## Contributing
 To contribute to this project contact Sam Rodriguez.  
-Github Repository URL: https://github.com/samrod777/Professional-README-Generator  
+Github Repository URL: https://github.com/samrod777/Team-Generator-CLI  
 
 ## License
 This application is covered under the MIT license.  
