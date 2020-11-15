@@ -52,4 +52,4 @@ Lastly the intern option will be selected, and the team  will be completed for t
 ![Team Generator LCI](./lib/pictures/addedintern.png)
 
 For a brief video demo, visit the link below:
-https://drive.google.com/file/d/1Y1c5aE19hjVB3x2cPT9YXsh3TsvRHpr2/view
+https://drive.google.com/file/d/1mCAwQvpLcRLb-Fw2dweF91wpIZrRAeLe/view
